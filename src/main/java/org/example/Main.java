@@ -28,7 +28,6 @@ public class Main {
          };
 
         Scanner scanner = new Scanner(System.in);
-
         while(true){
             System.out.println("Hello I am an online library, please choose one by selecting the number" +
                     "\n(1) Show Available Books" +
@@ -52,18 +51,71 @@ public class Main {
                         int id = scanner.nextInt();
                         scanner.nextLine();
 
+                        Book bookToCheckOut = null;
+                        for (int i = 0; i < books.length; i++) {
+                            if (books[i].getId() == id) {
+                                bookToCheckOut = books[i];
+                                break;
+                            }
+                        }
+
+                        if (bookToCheckOut != null) {
+                            System.out.println("Enter your name: ");
+                            String name = scanner.nextLine();
+                            bookToCheckOut.checkOut(name);
+                            System.out.println("Book checked out successfully!");
+                        } else {
+                            System.out.println("Book with that ID not found.");
+                        }
                     } else{
                     }
-
-
-
                     break;
 
                 case 2:
+                    System.out.println("Checked Out Books:");
+                    boolean anyCheckedOut = false; // to track if we find any
+
+                    for (int i = 0; i < books.length; i++) {
+                        if (books[i].isCheckedOut()) {
+                            anyCheckedOut = true;
+                            System.out.println("ID: " + books[i].getId() +
+                                    " ISBN: " + books[i].getIsbn() +
+                                    " Title: " + books[i].getTitle() +
+                                    " Checked out to: " + books[i].getCheckedOutTo());
+                        }
+                    }
+
+                    if (!anyCheckedOut) {
+                        System.out.println("No books are currently checked out.");
+                    }
+
+                    System.out.println("Press Enter to go back to the main menu...");
+                    scanner.nextLine();
                     break;
 
                 case 3:
                     System.out.println("what book do you want to check in:");
+                    int checkInId = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Book bookToCheckIn = null;
+                    for (int i = 0; i < books.length; i++) {
+                        if (books[i].getId() == checkInId) {
+                            bookToCheckIn = books[i];
+                            break;
+                        }
+                    }
+
+                    if (bookToCheckIn != null) {
+                        if (bookToCheckIn.isCheckedOut()) {
+                            bookToCheckIn.checkIn();
+                            System.out.println("Book checked in successfully!");
+                        } else {
+                            System.out.println("That book is not currently checked out.");
+                        }
+                    } else {
+                        System.out.println("Book with that ID not found.");
+                    }
                     break;
 
                 case 4:
@@ -73,11 +125,5 @@ public class Main {
 
             }
         }
-
-
-
-
-
-
     }
 }
